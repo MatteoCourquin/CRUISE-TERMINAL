@@ -4,23 +4,31 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:server": "node --env-file-if-exists=.env --import tsx server/index.ts",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test lib/geo/geo.test.ts lib/vessels/vessels.test.ts lib/vessels/cruise.test.ts lib/ais/mock.test.ts lib/ais/parse.test.ts lib/schedule/cruiseCalls.test.ts"
   },
   "dependencies": {
+    "@vis.gl/react-google-maps": "^1.10.1",
+    "lucide-react": "^1.48.0",
     "next": "16.3.6",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "ws": "^8.22.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/ws": "^8.18.1",
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }
