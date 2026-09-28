@@ -159,12 +159,13 @@ export function RadarApp() {
           </div>
 
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pb-24 [scrollbar-gutter:stable]">
-            <ShipList
-              vessels={vessels}
-              selectedMmsi={visibleMmsi}
-              loading={feed.loading}
-              onSelect={selectFromList}
-            />
+          <ShipList
+            vessels={vessels}
+            selectedMmsi={visibleMmsi}
+            loading={feed.loading}
+            status={feed.status}
+            onSelect={selectFromList}
+          />
             <UpcomingCalls />
           </div>
         </div>

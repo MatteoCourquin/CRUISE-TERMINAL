@@ -41,16 +41,26 @@ export function useVesselFeed() {
     if (USE_MOCK_AIS) return
 
     const socket = new WebSocket(AIS_SERVER_URL)
+    // Only mark offline if the socket never opens — an open feed with
+    // zero ships is still "live", not offline.
     const connectTimeout = window.setTimeout(() => {
-      setStatus((current) => (current === "connecting" ? "offline" : current))
+      if (socket.readyState === WebSocket.OPEN) {
+        setHasReceived(true)
+        return
+      }
+      setStatus("offline")
       setHasReceived(true)
     }, 4000)
+
+    socket.onopen = () => {
+      window.clearTimeout(connectTimeout)
+    }
 
     socket.onmessage = (event) => {
       const message = JSON.parse(String(event.data)) as RadarServerMessage
       if (message.type === "status") {
         setStatus(message.status)
-        if (message.status === "offline") setHasReceived(true)
+        if (message.status !== "connecting") setHasReceived(true)
       }
       if (message.type === "vessels") {
         setVessels(
@@ -61,7 +71,7 @@ export function useVesselFeed() {
           ),
         )
         setHasReceived(true)
-        setStatus("live")
+        setStatus((current) => (current === "offline" ? current : "live"))
       }
     }
 
