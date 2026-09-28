@@ -16,13 +16,13 @@ export function ShipList({
 }) {
   if (loading) {
     return (
-      <div>
+      <div aria-busy="true" aria-live="polite">
         <p className="text-[15px] text-muted">Recherche des bateaux…</p>
-        <div className="mt-3 space-y-2">
+        <div className="mt-3 space-y-2.5">
           {[0, 1, 2].map((item) => (
             <div
               key={item}
-              className="h-[92px] rounded-2xl bg-white motion-safe:animate-pulse"
+              className="h-[108px] rounded-2xl bg-panel motion-safe:animate-pulse"
             />
           ))}
         </div>
@@ -32,11 +32,11 @@ export function ShipList({
 
   if (vessels.length === 0) {
     return (
-      <div className="px-1 py-6">
-        <p className="text-[17px] font-semibold tracking-tight">
+      <div className="rounded-2xl bg-panel px-4 py-7 ring-1 ring-bridge/8">
+        <p className="font-display text-[18px] font-bold tracking-tight">
           Aucun paquebot au quai
         </p>
-        <p className="mt-2 max-w-[32ch] text-[15px] leading-6 text-muted">
+        <p className="mt-2 max-w-[36ch] text-[14px] leading-6 text-muted">
           On surveille les gros paquebots de croisière à Holland Amerikakade.
           Les prochaines arrivées et départs apparaîtront ici automatiquement.
         </p>
@@ -45,17 +45,20 @@ export function ShipList({
   }
 
   return (
-    <div>
-      <div className="space-y-2">
-        {vessels.map((vessel) => (
+    <ul className="space-y-2.5">
+      {vessels.map((vessel, index) => (
+        <li
+          key={vessel.mmsi}
+          className="animate-rise-in"
+          style={{ animationDelay: `${Math.min(index, 6) * 40}ms` }}
+        >
           <ShipCard
-            key={vessel.mmsi}
             vessel={vessel}
             selected={vessel.mmsi === selectedMmsi}
             onSelect={onSelect}
           />
-        ))}
-      </div>
-    </div>
+        </li>
+      ))}
+    </ul>
   )
 }

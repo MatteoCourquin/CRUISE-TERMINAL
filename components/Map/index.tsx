@@ -45,11 +45,14 @@ function QuayPin({ compact = false }: { compact?: boolean }) {
   return (
     <span className="flex flex-col items-center">
       {!compact ? (
-        <span className="mb-1 rounded-full bg-white px-2 py-0.5 text-[11px] font-medium text-bridge shadow-sm">
+        <span className="mb-1 rounded-full bg-panel/95 px-2.5 py-1 text-[11px] font-semibold tracking-tight text-bridge shadow-[0_4px_14px_-4px_rgba(11,21,32,0.35)] ring-1 ring-bridge/10 backdrop-blur-sm">
           Holland Amerikakade
         </span>
       ) : null}
-      <span className="size-3.5 rounded-full border-2 border-white bg-bridge shadow-sm" />
+      <span className="relative flex size-4 items-center justify-center">
+        <span className="absolute size-4 rounded-full bg-bridge/25 motion-safe:animate-pulse-live" />
+        <span className="size-3 rounded-full border-2 border-white bg-bridge shadow-sm" />
+      </span>
     </span>
   )
 }
@@ -67,8 +70,12 @@ function SchematicMap({
   const bridge = project(ERASMUS_BRIDGE.lat, ERASMUS_BRIDGE.lng)
 
   return (
-    <div className="relative h-full overflow-hidden bg-[#e7e2d8]">
-      <div className="absolute inset-x-0 top-[42%] h-20 -translate-y-1/2 bg-[#c5d7e4]" />
+    <div className="relative h-full overflow-hidden bg-[#b9c8d4]">
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_40%,#d5e2ec_0%,transparent_55%),linear-gradient(180deg,#a8bcd0_0%,#c5d4e0_48%,#d8e0e6_100%)]"
+      />
+      <div className="absolute inset-x-0 top-[42%] h-24 -translate-y-1/2 bg-[#8fadc2]/80 blur-[1px]" />
       <div
         className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
         style={quay}
@@ -76,10 +83,10 @@ function SchematicMap({
         <QuayPin />
       </div>
       <div
-        className="absolute z-[5] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center opacity-70"
+        className="absolute z-[5] flex -translate-x-1/2 -translate-y-1/2 flex-col items-center opacity-80"
         style={bridge}
       >
-        <span className="rounded-full bg-white/90 px-1.5 py-0.5 text-[10px] text-muted">
+        <span className="rounded-full bg-panel/90 px-1.5 py-0.5 text-[10px] font-medium text-muted shadow-sm ring-1 ring-bridge/10">
           Erasmusbrug
         </span>
       </div>
@@ -100,9 +107,11 @@ function SchematicMap({
         )
       })}
       {selected ? (
-        <div className="absolute top-3 right-3 left-3 z-20 rounded-2xl bg-white px-3 py-2 shadow-sm">
-          <p className="text-[15px] font-semibold">{vesselName(selected)}</p>
-          <p className="text-[13px] text-bridge">
+        <div className="absolute top-3 right-3 left-3 z-20 rounded-2xl bg-panel/95 px-3.5 py-2.5 shadow-[0_12px_30px_-12px_rgba(11,21,32,0.4)] ring-1 ring-bridge/10 backdrop-blur-md lg:left-auto lg:w-72">
+          <p className="font-display text-[15px] font-bold tracking-tight">
+            {vesselName(selected)}
+          </p>
+          <p className="text-[13px] font-semibold text-bridge">
             {quayActivityLabel(selected.quayActivity)}
           </p>
           <p className="text-[13px] text-muted">
@@ -111,7 +120,7 @@ function SchematicMap({
           </p>
         </div>
       ) : null}
-      <p className="absolute bottom-3 left-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] text-muted">
+      <p className="absolute bottom-3 left-3 rounded-full bg-panel/90 px-2.5 py-1 text-[11px] text-muted shadow-sm ring-1 ring-bridge/10 backdrop-blur-sm">
         Aperçu local, en attente de la clé Google Maps
       </p>
     </div>
@@ -192,7 +201,7 @@ function GoogleRadarMap({
         anchorTop="-100%"
         zIndex={2}
       >
-        <span className="rounded-full bg-white/95 px-1.5 py-0.5 text-[10px] text-muted shadow-sm">
+        <span className="rounded-full bg-panel/95 px-1.5 py-0.5 text-[10px] font-medium text-muted shadow-sm ring-1 ring-bridge/10">
           Erasmusbrug
         </span>
       </AdvancedMarker>
@@ -220,8 +229,10 @@ function GoogleRadarMap({
           headerDisabled
         >
           <div className="min-w-36 pr-1 text-ink">
-            <p className="text-[15px] font-semibold">{vesselName(selected)}</p>
-            <p className="text-[13px] text-bridge">
+            <p className="font-display text-[15px] font-bold tracking-tight">
+              {vesselName(selected)}
+            </p>
+            <p className="text-[13px] font-semibold text-bridge">
               {quayActivityLabel(selected.quayActivity)}
             </p>
             <p className="text-[13px] text-muted">
@@ -230,8 +241,12 @@ function GoogleRadarMap({
                 ? ` · ${Math.round(selected.lengthMeters)} m`
                 : ""}
             </p>
-            <p className="text-[13px]">{formatSpeed(selected.speed)}</p>
-            <p className="text-[13px]">{primaryTimeLabel(selected)}</p>
+            <p className="font-mono text-[12px] tabular-nums">
+              {formatSpeed(selected.speed)}
+            </p>
+            <p className="font-mono text-[12px] tabular-nums">
+              {primaryTimeLabel(selected)}
+            </p>
           </div>
         </InfoWindow>
       ) : null}

@@ -41,6 +41,10 @@ export function useVesselFeed() {
     if (USE_MOCK_AIS) return
 
     const socket = new WebSocket(AIS_SERVER_URL)
+    const connectTimeout = window.setTimeout(() => {
+      setStatus((current) => (current === "connecting" ? "offline" : current))
+      setHasReceived(true)
+    }, 4000)
 
     socket.onmessage = (event) => {
       const message = JSON.parse(String(event.data)) as RadarServerMessage
@@ -71,7 +75,10 @@ export function useVesselFeed() {
       setHasReceived(true)
     }
 
-    return () => socket.close()
+    return () => {
+      window.clearTimeout(connectTimeout)
+      socket.close()
+    }
   }, [])
 
   return {

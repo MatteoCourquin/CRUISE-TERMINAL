@@ -1,31 +1,94 @@
 @import "tailwindcss";
 
 :root {
-  --canvas: #e6e6eb;
-  --surface: #f5f5f7;
-  --ink: #1c1c1e;
-  --muted: #6e6e73;
-  --bridge: #0b3a5b;
-  --live: #1f8a4c;
-  --wait: #c56a00;
-  --offline: #d12b1f;
+  --canvas: #c5d0db;
+  --surface: #eef2f6;
+  --panel: #f7f9fb;
+  --ink: #0b1520;
+  --muted: #5a6a78;
+  --bridge: #0a3d5c;
+  --bridge-soft: #d6e4ed;
+  --harbor: #7a9bb0;
+  --live: #0d8a5b;
+  --wait: #b86e08;
+  --offline: #c4322a;
+  --ring: color-mix(in srgb, var(--bridge) 55%, transparent);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @theme inline {
   --color-canvas: var(--canvas);
   --color-surface: var(--surface);
+  --color-panel: var(--panel);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-bridge: var(--bridge);
+  --color-bridge-soft: var(--bridge-soft);
+  --color-harbor: var(--harbor);
   --color-live: var(--live);
   --color-wait: var(--wait);
   --color-offline: var(--offline);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-manrope);
+  --font-display: var(--font-syne);
+  --font-mono: var(--font-ibm);
+  --ease-out: var(--ease-out);
 }
 
 body {
   background: var(--canvas);
   color: var(--ink);
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--bridge) 22%, white);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--bridge);
+  outline-offset: 2px;
+}
+
+@keyframes pulse-live {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-pulse-live {
+  animation: pulse-live 1.8s var(--ease-out) infinite;
+}
+
+.animate-rise-in {
+  animation: rise-in 0.45s var(--ease-out) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse-live,
+  .animate-rise-in,
+  .motion-safe\:animate-pulse {
+    animation: none !important;
+  }
+
+  * {
+    scroll-behavior: auto !important;
+  }
 }
